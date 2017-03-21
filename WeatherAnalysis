@@ -1,45 +1,25 @@
 #Python API bindings PySpark is all set for use. To use SQL functions, need to instantiate SQL Context
-'''
 from pyspark.sql import SQLContext
 from pyspark.sql import functions
 from pyspark.sql.types import *
 sqlCtx = SQLContext(sc)
-'''
-Cmd 2
 
-Read list of all world-wide weather stations. See a sample of the stations
-Cmd 3
+#Read list of all world-wide weather stations. See a sample of the stations
 
 cefFile = sc.textFile("ghcnd-stations.txt")
 stationsRDD = cefFile.map(lambda line: (line[0:11],line[41:63]))
 
-Cmd 4
-
-Lets concentrate on the maximum temperature for the day
-Cmd 5
+#Lets concentrate on the maximum temperature for the day
 
 dsWeatherData=sqlCtx.sql("Select * from WeatherData where Type='TMAX'").cache()
 
-Cmd 6
-
-What is the size of the dataset?
-Cmd 7
-
+#What is the size of the dataset?
 print(dsWeatherData.count())
 
-Cmd 8
-
-TMAX Comparison from Year 1970 and Year 2016
-Cmd 9
-
+#TMAX Comparison from Year 1970 and Year 2016
 dsTempData=dsWeatherData.selectExpr("Station","Cast(Date as int) as dateint","Value/10 as TMAX","substring(Date,1,4) as DateYear").cache()
-
-Cmd 10
 
 dsAvgData=dsTempData.groupby("DateYear").avg("TMAX")
 
-Cmd 11
-
 dsAvgData.show() 
 
-Cancelled
