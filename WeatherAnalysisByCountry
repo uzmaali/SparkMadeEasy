@@ -1,0 +1,32 @@
+#Python API bindings PySpark is all set for use. To use SQL functions, need to instantiate SQL Context
+from pyspark.sql import SQLContext
+from pyspark.sql import functions
+from pyspark.sql.types import *
+sqlCtx = SQLContext(sc)
+
+
+#Read list of all world-wide weather stations. See a sample of the stations
+dsAvgTempByMonth=sqlCtx.sql("Select substring(STATION,1,2) as Country, substring(DATE,1,6) as DateYearMonth, Avg(VALUE/10) as AvgTemp  from WeatherData where Type='TMAX'   group by substring(STATION,1,2), substring(Date,1,6) ").cache()
+
+
+display(dsAvgTempByMonth)
+
+
+dsReadyToCluster=dsAvgTempByMonth.groupBy("Country").pivot("DateYearMonth").avg("AvgTemp").orderBy("Country").cache()
+
+
+#Import Mllib Kmeans
+from pyspark.mllib.clustering import KMeans, KMeansModel
+
+
+dataCluster=dsReadyToClusterC.rdd.map(lambda l:(l[1:]))
+
+clusters = KMeans.train(dataCluster, 7, maxIterations=10)
+
+Alldata=dsReadyToClusterC.rdd.map(lambda l:(l[0],(l[1:]))).map(lambda (Country,(features)): (Country,clusters.predict(features))).toDF().cache()
+
+Alldata.registerTempTable("Alldata2")
+
+dsCountryClustered=sqlCtx.sql("Select substring(Countries.country,4,length(Countries.country)-4),Alldata2._2 from Alldata2 inner join Countries on substring(Countries.country,1,2)=Alldata2._1")
+
+display(dsCountryClustered)
