@@ -1,3 +1,10 @@
+%sh
+wget -O /2016.csv.gz 'ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/by_year/2015.csv.gz'
+
+dbutils.fs.cp("file:/2015.csv.gz", "dbfs:/")
+
+
+
 #Python API bindings PySpark is all set for use. To use SQL functions, need to instantiate SQL Context
 from pyspark.sql import SQLContext
 from pyspark.sql import functions
