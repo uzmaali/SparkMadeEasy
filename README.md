@@ -3,6 +3,9 @@
 Apache Spark™ is a fast and general engine for large-scale data processing. Used for analytics and predictive analytics 
 
 It can run on Hadoop, standalone, or in the cloud. It can access diverse data sources including HDFS (Hadoop File System), Amazon S3 (cloud storage) and various noSQL Databases. 
+
 Spark Framework can be accessed in Scala, Python, Java and R
 
+This demo session is held for http://sciprog.ca/. The presentation can be <a href='https://github.com/uzmaali/SparkMadeEasy/blob/master/Spark%20Made%20Easy.pptx' target=_blank>accessed here</a>.
 
+## Analyze 
